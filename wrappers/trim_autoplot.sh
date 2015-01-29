@@ -41,6 +41,14 @@ if [ $# -lt 4 ]; then
     usage;
 fi
 
+#   check if R is installed and in the path
+if `command -v Rscript > /dev/null 2> /dev/null`
+    then 
+        echo "R is installed, OK"
+    else
+        echo "You need R (Rscript) to be installed and in your \$PATH"
+        exit 1
+fi
 
 ## pre-config
 # replace $1, $2, $3 with your sample names or use command line
@@ -111,3 +119,8 @@ $SICKLE pe -t sanger -q $QUAL_THRESH \
 
 T="$(($(date +%s)-T))"
 echo "[trim.sh] $SAMPLE_NAME took seconds: ${T}"
+
+#   This section runs the plotting commands
+#   make a directory for the plots
+mkdir -p $STAT/plots
+Rscript plots_seqqs.R $STAT $SAMPLE_NAME
