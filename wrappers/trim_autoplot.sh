@@ -11,10 +11,12 @@ set -o pipefail
 VERSION=0.4
 
 # path to applications
-SOFTWARE=~/shared/Software
+#SOFTWARE=~/shared/Software
+SOFTWARE=~/tmp
 SICKLE=$SOFTWARE/sickle/sickle
 SCYTHE=$SOFTWARE/scythe/scythe
-SEQQS=$SOFTWARE/seqqs/seqqs
+#SEQQS=$SOFTWARE/seqqs/seqqs
+SEQQS=~/Dropbox/GitHub/seqqs/seqqs
 
 usage() {
     echo -e "\
@@ -52,7 +54,8 @@ OUTDIR=$4
 # path to illumina adapters file - replace this with a path to your
 # adapters file
 #ADAPTERS=${5:$HOME/shared/illumina_adapters.fa}
-ADAPTERS=$HOME/shared/illumina_adapters.fa
+#ADAPTERS=${HOME}/shared/illumina_adapters.fa
+ADAPTERS=~/tmp/scythe/illumina_adapters.fa
 
 # scythe's prior
 PRIOR=${6:-0.4}
@@ -61,7 +64,7 @@ PRIOR=${6:-0.4}
 QUAL_THRESH=${7:-20}
 
 # stat directory
-STAT=${8:-stats}
+STAT=${8:-$OUTDIR/stats}
 
 check_file_exists() {
     if [ ! -e "$1" ]; then 
