@@ -9,15 +9,20 @@ args <- commandArgs(TRUE)
 statsdir <- args[1]
 samplename <- args[2]
 
-# nucleotide table plot
-#   print out some messages
-print(paste("Creating raw nucleotide composition plot for ", samplename, " Forward Reads..."), sep="")
+#   Start a plot file for forward
+outputfile <- paste(statsdir, "/", samplename, "_Forward_SeqqsPlots.pdf", sep="")
+pdf(file=outputfile, width=8.8, 11)
+
+#   Set it up so that we have multiple plots on one graphics device
+par(mfrow=c(2, 2))
+#   They fill top-to-bottom, left-to-right
+
+#####
+#   Base composition plots
+#####
+#       Forward before trimming
 #   Build the name of the file that will be read here
 raw.forward.nucl.name <- paste(statsdir, "/raw_", samplename, "_R1_nucl.txt", sep="")
-#   and build the output name
-raw.forward.nucl.output <- paste(statsdir, "/plots/Raw_", samplename, "_R1_NuclPlot.pdf", sep="")
-# ignoring 'N' and other ambiguities as they are few or absent
-pdf(file=raw.forward.nucl.output, 6, 6)
 nucl <- read.table(raw.forward.nucl.name, header=TRUE)
 #   Sum across rows to get the total number of calls at each position
 total_bases <- apply(nucl, 1, sum)
@@ -32,100 +37,20 @@ upper_bound <- max(A, C, G, T) + 0.02
 #   Same with the lower bound, but subtract 0.02
 lower_bound <- min(A, C, G, T) - 0.02
 # legends and figure limits need to be positioned dynamically
-plot(A, col='green', ylim=c(lower_bound, upper_bound), cex=0.6, xlab='Position in Read (bp)', ylab='Percentage of Nucleotides', main=paste("Base Composition in Raw ", samplename, " Forward Reads", sep=""))
-legend(90, upper_bound, c('A', 'C', 'G', 'T'), pch=1, col=c('green', 'blue', 'black', 'red'), cex=0.6)
-points(C, col='blue', cex=0.6)
-points(G, col='black', cex=0.6)
-points(T, col='red', cex=0.6)
+plot(A, col='green', ylim=c(lower_bound, upper_bound), cex=0.3, xlab='Position in Read (bp)', ylab='Percentage of Nucleotides', main="Raw\nBase Composition", pch=19)
+legend(90, upper_bound, c('A', 'C', 'G', 'T'), pch=19, col=c('green', 'blue', 'black', 'red'), cex=0.7)
+points(C, col='blue', cex=0.3, pch=19)
+points(G, col='black', cex=0.3, pch=19)
+points(T, col='red', cex=0.3, pch=19)
+lines(A, col="green", type="l", lwd=0.5)
+lines(C, col='blue', type="l", lwd=0.5)
+lines(G, col='black', type="l", lwd=0.5)
+lines(T, col='red', type="l", lwd=0.5)
 #   Add a line at 0.25
-abline(h=0.25, col="orange", lwd=2)
-dev.off()
+abline(h=0.25, col="orange", lwd=1)
 
-# need to minimize difference in count because most values are in the 100 bp class
-# using log of count
-print(paste("Creating raw read length distribution plot for ", samplename, " Forward Reads..."), sep="")
-raw.forward.len.name <- paste(statsdir, "/raw_", samplename, "_R1_len.txt", sep="")
-raw.forward.len.output <- paste(statsdir, "/plots/Raw_", samplename, "_R1_LengthDist.pdf", sep="")
-pdf(file=raw.forward.len.output,6, 6)
-len <- read.table(raw.forward.len.name, header=TRUE)
-plot(len$pos,log(len$count), xlab='Read Length', ylab='Log of Read Count', main=paste("Distribution of Read Length in Raw ", samplename, " Forward Reads", sep=""))
-dev.off()
-
-# plot of matrix of quality scores by position
-# this needs
-print(paste("Creating raw base quality heatmap for ", samplename, " Forward Reads..."), sep="")
-raw.forward.qual.name <- paste(statsdir, "/raw_", samplename, "_R1_qual.txt", sep="")
-raw.forward.qual.output <- paste(statsdir, "/plots/Raw_", samplename, "_R1_QualityHeatMap.pdf", sep="")
-pdf(file=raw.forward.qual.output, 8.5, 11)
-qual <- read.table(raw.forward.qual.name,header=TRUE)
-heatmap(as.matrix(qual[apply(qual,2,sum)> 0]),Colv=NA, Rowv=NA, col=gray(9:1/9), main=paste("Quality Heatmap in Raw ", samplename, " Forward Reads", sep=""))
-dev.off()
-
-
-#####
-#   The same for reverse
-#####
-print(paste("Creating raw nucleotide composition plot for ", samplename, " Reverse Reads..."), sep="")
-#   Build the name of the file that will be read here
-raw.Reverse.nucl.name <- paste(statsdir, "/raw_", samplename, "_R2_nucl.txt", sep="")
-#   and build the output name
-raw.Reverse.nucl.output <- paste(statsdir, "/plots/Raw_", samplename, "_R2_NuclPlot.pdf", sep="")
-# ignoring 'N' and other ambiguities as they are few or absent
-pdf(file=raw.Reverse.nucl.output, 6, 6)
-nucl <- read.table(raw.Reverse.nucl.name, header=TRUE)
-#   Sum across rows to get the total number of calls at each position
-total_bases <- apply(nucl, 1, sum)
-#   Calculate the proportions of each nucleotide
-#   IDEALLY these are around 25% each
-A <- nucl$A / total_bases
-C <- nucl$C / total_bases
-G <- nucl$G / total_bases
-T <- nucl$T / total_bases
-#   What is the maximum proportion? Add 0.02 to it for the upper bound of the plot
-upper_bound <- max(A, C, G, T) + 0.02
-#   Same with the lower bound, but subtract 0.02
-lower_bound <- min(A, C, G, T) - 0.02
-# legends and figure limits need to be positioned dynamically
-plot(A, col='green', ylim=c(lower_bound, upper_bound), cex=0.6, xlab='Position in Read (bp)', ylab='Percentage of Nucleotides', main=paste("Base Composition in Raw ", samplename, " Reverse Reads", sep=""))
-legend(90, upper_bound, c('A', 'C', 'G', 'T'), pch=1, col=c('green', 'blue', 'black', 'red'), cex=0.6)
-points(C, col='blue', cex=0.6)
-points(G, col='black', cex=0.6)
-points(T, col='red', cex=0.6)
-#   Add a line at 0.25
-abline(h=0.25, col="orange", lwd=2)
-dev.off()
-
-# need to minimize difference in count because most values are in the 100 bp class
-# using log of count
-print(paste("Creating raw read length distribution plot for ", samplename, " Reverse Reads..."), sep="")
-raw.Reverse.len.name <- paste(statsdir, "/raw_", samplename, "_R2_len.txt", sep="")
-raw.Reverse.len.output <- paste(statsdir, "/plots/Raw_", samplename, "_R2_LengthDist.pdf", sep="")
-pdf(file=raw.Reverse.len.output,6, 6)
-len <- read.table(raw.Reverse.len.name, header=TRUE)
-plot(len$pos,log(len$count), xlab='Read Length', ylab='Log of Read Count', main=paste("Distribution of Read Length in Raw ", samplename, " Reverse Reads", sep=""))
-dev.off()
-
-# plot of matrix of quality scores by position
-# this needs
-print(paste("Creating raw base quality heatmap for ", samplename, " Reverse Reads..."), sep="")
-raw.Reverse.qual.name <- paste(statsdir, "/raw_", samplename, "_R2_qual.txt", sep="")
-raw.Reverse.qual.output <- paste(statsdir, "/plots/Raw_", samplename, "_R2_QualityHeatMap.pdf", sep="")
-pdf(file=raw.Reverse.qual.output, 8.5, 11)
-qual <- read.table(raw.Reverse.qual.name,header=TRUE)
-heatmap(as.matrix(qual[apply(qual,2,sum)> 0]),Colv=NA, Rowv=NA, col=gray(9:1/9), main=paste("Quality Heatmap in Raw ", samplename, " Reverse Reads", sep=""))
-dev.off()
-
-
-#####
-#   And then for the trimmed reads
-#####
-print(paste("Creating Trimmed nucleotide composition plot for ", samplename, " Forward Reads..."), sep="")
-#   Build the name of the file that will be read here
+#       Forward after trimming
 Trimmed.forward.nucl.name <- paste(statsdir, "/Trimmed_", samplename, "_R1_nucl.txt", sep="")
-#   and build the output name
-Trimmed.forward.nucl.output <- paste(statsdir, "/plots/Trimmed_", samplename, "_R1_NuclPlot.pdf", sep="")
-# ignoring 'N' and other ambiguities as they are few or absent
-pdf(file=Trimmed.forward.nucl.output, 6, 6)
 nucl <- read.table(Trimmed.forward.nucl.name, header=TRUE)
 #   Sum across rows to get the total number of calls at each position
 total_bases <- apply(nucl, 1, sum)
@@ -140,46 +65,114 @@ upper_bound <- max(A, C, G, T) + 0.02
 #   Same with the lower bound, but subtract 0.02
 lower_bound <- min(A, C, G, T) - 0.02
 # legends and figure limits need to be positioned dynamically
-plot(A, col='green', ylim=c(lower_bound, upper_bound), cex=0.6, xlab='Position in Read (bp)', ylab='Percentage of Nucleotides', main=paste("Base Composition in Trimmed ", samplename, " Forward Reads", sep=""))
-legend(90, upper_bound, c('A', 'C', 'G', 'T'), pch=1, col=c('green', 'blue', 'black', 'red'), cex=0.6)
-points(C, col='blue', cex=0.6)
-points(G, col='black', cex=0.6)
-points(T, col='red', cex=0.6)
+plot(A, col='green', ylim=c(lower_bound, upper_bound), cex=0.3, xlab='Position in Read (bp)', ylab='Percentage of Nucleotides', main="Cleaned\nBase Composition", pch=19)
+legend(90, upper_bound, c('A', 'C', 'G', 'T'), pch=19, col=c('green', 'blue', 'black', 'red'), cex=0.7)
+points(C, col='blue', cex=0.3, pch=19)
+points(G, col='black', cex=0.3, pch=19)
+points(T, col='red', cex=0.3, pch=19)
+lines(A, col="green", type="l", lwd=0.5)
+lines(C, col='blue', type="l", lwd=0.5)
+lines(G, col='black', type="l", lwd=0.5)
+lines(T, col='red', type="l", lwd=0.5)
 #   Add a line at 0.25
-abline(h=0.25, col="orange", lwd=2)
-dev.off()
+abline(h=0.25, col="orange", lwd=1)
 
-# need to minimize difference in count because most values are in the 100 bp class
-# using log of count
-print(paste("Creating Trimmed read length distribution plot for ", samplename, " Forward Reads..."), sep="")
+#####
+#   Length distribution
+#####
+#       Before trimming
+raw.forward.len.name <- paste(statsdir, "/raw_", samplename, "_R1_len.txt", sep="")
+len <- read.table(raw.forward.len.name, header=TRUE)
+counts <- log(len$count)
+counts[counts == -Inf] <- 0
+#   The step size for the bar plot
+step <- 5
+#len <- len[len$count != 0,]
+at <- barplot(counts, xlab='Read Length', ylab='Log of Read Count', main="Length Distribution", col="blue", space=rep(0, length(len)), border="white")
+at.labs <- seq_along(at)
+at.labs <- c(at.labs[seq(1, length(at.labs), step)], length(at.labs))
+at.pos <- c(at[seq(1, length(at), step)], at[length(at)])
+axis(1, at=at.pos, labels=as.character(at.labs))
+
+#       After trimming
 Trimmed.forward.len.name <- paste(statsdir, "/Trimmed_", samplename, "_R1_len.txt", sep="")
-Trimmed.forward.len.output <- paste(statsdir, "/plots/Trimmed_", samplename, "_R1_LengthDist.pdf", sep="")
-pdf(file=Trimmed.forward.len.output,6, 6)
 len <- read.table(Trimmed.forward.len.name, header=TRUE)
-plot(len$pos,log(len$count), xlab='Read Length', ylab='Log of Read Count', main=paste("Distribution of Read Length in Trimmed ", samplename, " Forward Reads", sep=""))
+counts <- log(len$count)
+counts[counts == -Inf] <- 0
+#   The step size for the bar plot
+step <- 5
+#len <- len[len$count != 0,]
+at <- barplot(counts, xlab='Read Length', ylab='Log of Read Count', main="Length Distribution", col="blue", space=rep(0, length(len)), border="white")
+at.labs <- seq_along(at)
+at.labs <- c(at.labs[seq(1, length(at.labs), step)], length(at.labs))
+at.pos <- c(at[seq(1, length(at), step)], at[length(at)])
+axis(1, at=at.pos, labels=as.character(at.labs))
+
 dev.off()
 
-# plot of matrix of quality scores by position
-# this needs
-print(paste("Creating Trimmed base quality heatmap for ", samplename, " Forward Reads..."), sep="")
+
+#####
+#   Quality heatmaps
+#####
+#       Before trimming
+raw.forward.qual.name <- paste(statsdir, "/raw_", samplename, "_R1_qual.txt", sep="")
+raw.forward.output <- paste(statsdir, "/Raw_", samplename, "_ForwardQuality.pdf", sep="")
+pdf(file=raw.forward.output, 8, 8)
+qual <- read.table(raw.forward.qual.name,header=TRUE)
+heatmap(as.matrix(qual[apply(qual,2,sum)> 0]),Colv=NA, Rowv=NA, col=gray(9:1/9), main=paste("Quality Heatmap in Raw ", samplename, " Forward Reads", sep=""))
+dev.off()
+
+#       After trimming
 Trimmed.forward.qual.name <- paste(statsdir, "/Trimmed_", samplename, "_R1_qual.txt", sep="")
-Trimmed.forward.qual.output <- paste(statsdir, "/plots/Trimmed_", samplename, "_R1_QualityHeatMap.pdf", sep="")
-pdf(file=Trimmed.forward.qual.output, 8.5, 11)
+Trimmed.forward.output <- paste(statsdir, "/Trimmed_", samplename, "_ForwardQuality.pdf", sep="")
+pdf(file=Trimmed.forward.output, 8, 8)
 qual <- read.table(Trimmed.forward.qual.name,header=TRUE)
 heatmap(as.matrix(qual[apply(qual,2,sum)> 0]),Colv=NA, Rowv=NA, col=gray(9:1/9), main=paste("Quality Heatmap in Trimmed ", samplename, " Forward Reads", sep=""))
-dev.off()
 
 
 #####
-#   The same for reverse
+#   Reverse plots
 #####
-print(paste("Creating Trimmed nucleotide composition plot for ", samplename, " Reverse Reads..."), sep="")
+outputfile <- paste(statsdir, "/", samplename, "_Reverse_SeqqsPlots.pdf", sep="")
+pdf(file=outputfile, width=8.8, height=11)
+#   Set it up so that we have multiple plots on one graphics device
+par(mfrow=c(2, 2))
+
+#####
+#   Base composition plots
+#####
+#   Before trimming
 #   Build the name of the file that will be read here
+raw.Reverse.nucl.name <- paste(statsdir, "/raw_", samplename, "_R2_nucl.txt", sep="")
+nucl <- read.table(raw.Reverse.nucl.name, header=TRUE)
+#   Sum across rows to get the total number of calls at each position
+total_bases <- apply(nucl, 1, sum)
+#   Calculate the proportions of each nucleotide
+#   IDEALLY these are around 25% each
+A <- nucl$A / total_bases
+C <- nucl$C / total_bases
+G <- nucl$G / total_bases
+T <- nucl$T / total_bases
+#   What is the maximum proportion? Add 0.02 to it for the upper bound of the plot
+upper_bound <- max(A, C, G, T) + 0.02
+#   Same with the lower bound, but subtract 0.02
+lower_bound <- min(A, C, G, T) - 0.02
+# legends and figure limits need to be positioned dynamically
+plot(A, col='green', ylim=c(lower_bound, upper_bound), cex=0.3, xlab='Position in Read (bp)', ylab='Percentage of Nucleotides', main="Raw\nBase Composition", pch=19)
+legend(90, upper_bound, c('A', 'C', 'G', 'T'), pch=19, col=c('green', 'blue', 'black', 'red'), cex=0.7)
+points(C, col='blue', cex=0.3, pch=19)
+points(G, col='black', cex=0.3, pch=19)
+points(T, col='red', cex=0.3, pch=19)
+lines(A, col="green", type="l", lwd=0.5)
+lines(C, col='blue', type="l", lwd=0.5)
+lines(G, col='black', type="l", lwd=0.5)
+lines(T, col='red', type="l", lwd=0.5)
+#   Add a line at 0.25
+abline(h=0.25, col="orange", lwd=1)
+
+#   After trimming
 Trimmed.Reverse.nucl.name <- paste(statsdir, "/Trimmed_", samplename, "_R2_nucl.txt", sep="")
 #   and build the output name
-Trimmed.Reverse.nucl.output <- paste(statsdir, "/plots/Trimmed_", samplename, "_R2_NuclPlot.pdf", sep="")
-# ignoring 'N' and other ambiguities as they are few or absent
-pdf(file=Trimmed.Reverse.nucl.output, 6, 6)
 nucl <- read.table(Trimmed.Reverse.nucl.name, header=TRUE)
 #   Sum across rows to get the total number of calls at each position
 total_bases <- apply(nucl, 1, sum)
@@ -194,31 +187,67 @@ upper_bound <- max(A, C, G, T) + 0.02
 #   Same with the lower bound, but subtract 0.02
 lower_bound <- min(A, C, G, T) - 0.02
 # legends and figure limits need to be positioned dynamically
-plot(A, col='green', ylim=c(lower_bound, upper_bound), cex=0.6, xlab='Position in Read (bp)', ylab='Percentage of Nucleotides', main=paste("Base Composition in Trimmed ", samplename, " Reverse Reads", sep=""))
-legend(90, upper_bound, c('A', 'C', 'G', 'T'), pch=1, col=c('green', 'blue', 'black', 'red'), cex=0.6)
-points(C, col='blue', cex=0.6)
-points(G, col='black', cex=0.6)
-points(T, col='red', cex=0.6)
+plot(A, col='green', ylim=c(lower_bound, upper_bound), cex=0.3, xlab='Position in Read (bp)', ylab='Percentage of Nucleotides', main="Cleaned\nBase Composition", pch=19)
+legend(90, upper_bound, c('A', 'C', 'G', 'T'), pch=19, col=c('green', 'blue', 'black', 'red'), cex=0.7)
+points(C, col='blue', cex=0.3, pch=19)
+points(G, col='black', cex=0.3, pch=19)
+points(T, col='red', cex=0.3, pch=19)
+lines(A, col="green", type="l", lwd=0.5)
+lines(C, col='blue', type="l", lwd=0.5)
+lines(G, col='black', type="l", lwd=0.5)
+lines(T, col='red', type="l", lwd=0.5)
 #   Add a line at 0.25
-abline(h=0.25, col="orange", lwd=2)
-dev.off()
+abline(h=0.25, col="orange", lwd=1)
 
-# need to minimize difference in count because most values are in the 100 bp class
-# using log of count
-print(paste("Creating Trimmed read length distribution plot for ", samplename, " Reverse Reads..."), sep="")
+#####
+#   Length distribution
+#####
+#       Before trimming
+raw.Reverse.len.name <- paste(statsdir, "/raw_", samplename, "_R2_len.txt", sep="")
+len <- read.table(raw.Reverse.len.name, header=TRUE)
+counts <- log(len$count)
+counts[counts == -Inf] <- 0
+#   The step size for the bar plot
+step <- 5
+#len <- len[len$count != 0,]
+at <- barplot(counts, xlab='Read Length', ylab='Log of Read Count', main="Length Distribution", col="blue", space=rep(0, length(len)), border="white")
+at.labs <- seq_along(at)
+at.labs <- c(at.labs[seq(1, length(at.labs), step)], length(at.labs))
+at.pos <- c(at[seq(1, length(at), step)], at[length(at)])
+axis(1, at=at.pos, labels=as.character(at.labs))
+
+#       After trimming
 Trimmed.Reverse.len.name <- paste(statsdir, "/Trimmed_", samplename, "_R2_len.txt", sep="")
-Trimmed.Reverse.len.output <- paste(statsdir, "/plots/Trimmed_", samplename, "_R2_LengthDist.pdf", sep="")
-pdf(file=Trimmed.Reverse.len.output,6, 6)
 len <- read.table(Trimmed.Reverse.len.name, header=TRUE)
-plot(len$pos,log(len$count), xlab='Read Length', ylab='Log of Read Count', main=paste("Distribution of Read Length in Trimmed ", samplename, " Reverse Reads", sep=""))
+counts <- log(len$count)
+counts[counts == -Inf] <- 0
+#   The step size for the bar plot
+step <- 5
+#len <- len[len$count != 0,]
+at <- barplot(counts, xlab='Read Length', ylab='Log of Read Count', main="Length Distribution", col="blue", space=rep(0, length(len)), border="white")
+at.labs <- seq_along(at)
+at.labs <- c(at.labs[seq(1, length(at.labs), step)], length(at.labs))
+at.pos <- c(at[seq(1, length(at), step)], at[length(at)])
+axis(1, at=at.pos, labels=as.character(at.labs))
 dev.off()
 
-# plot of matrix of quality scores by position
-# this needs
-print(paste("Creating Trimmed base quality heatmap for ", samplename, " Reverse Reads..."), sep="")
-Trimmed.Reverse.qual.name <- paste(statsdir, "/Trimmed_", samplename, "_R2_qual.txt", sep="")
-Trimmed.Reverse.qual.output <- paste(statsdir, "/plots/Trimmed_", samplename, "_R2_QualityHeatMap.pdf", sep="")
-pdf(file=Trimmed.Reverse.qual.output, 8.5, 11)
-qual <- read.table(Trimmed.Reverse.qual.name,header=TRUE)
+#####
+#   Quality heatmaps
+#####
+
+#   Before trimming
+raw.Reverse.qual.name <- paste(statsdir, "/raw_", samplename, "_R2_qual.txt", sep="")
+raw.Reverse.output <- paste(statsdir, "/Raw_", samplename, "_ReverseQuality.pdf", sep="")
+pdf(file=raw.Reverse.output, 8, 8)
+qual <- read.table(raw.Reverse.qual.name,header=TRUE)
 heatmap(as.matrix(qual[apply(qual,2,sum)> 0]),Colv=NA, Rowv=NA, col=gray(9:1/9), main=paste("Quality Heatmap in Raw ", samplename, " Reverse Reads", sep=""))
 dev.off()
+
+#   After trimming
+Trimmed.Reverse.qual.name <- paste(statsdir, "/Trimmed_", samplename, "_R2_qual.txt", sep="")
+Trimmed.Reverse.output <- paste(statsdir, "/Trimmed_", samplename, "_ReverseQuality.pdf", sep="")
+pdf(file=Trimmed.Reverse.output, 8, 8)
+qual <- read.table(Trimmed.Reverse.qual.name,header=TRUE)
+heatmap(as.matrix(qual[apply(qual,2,sum)> 0]),Colv=NA, Rowv=NA, col=gray(9:1/9), main=paste("Quality Heatmap in Trimmed ", samplename, " Reverse Reads", sep=""))
+dev.off()
+
