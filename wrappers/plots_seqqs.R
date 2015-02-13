@@ -165,7 +165,7 @@ BaseQualHeatmap <- function(qual, colors)
 #####
 #   Forward plots
 #####
-outputfile <- paste(statsdir, "/", samplename, "_Forward_SeqqsPlots.pdf", sep="")
+outputfile <- paste(statsdir, "/plots/", samplename, "_Forward_SeqqsPlots.pdf", sep="")
 pdf(file=outputfile, width=8.8, 11)
 
 #   Set it up so that we have multiple plots on one graphics device
@@ -211,7 +211,7 @@ dev.off()
 #####
 #   Reverse plots
 #####
-outputfile <- paste(statsdir, "/", samplename, "_Reverse_SeqqsPlots.pdf", sep="")
+outputfile <- paste(statsdir, "/plots/", samplename, "_Reverse_SeqqsPlots.pdf", sep="")
 pdf(file=outputfile, width=8.8, height=11)
 #   Set it up so that we have multiple plots on one graphics device
 par(mfrow=c(3, 2))
