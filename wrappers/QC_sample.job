@@ -1,0 +1,31 @@
+#!/bin/sh
+
+#PBS -l mem=4000mb,nodes=1:ppn=4,walltime=2:00:00 
+#PBS -m abe 
+#PBS -M pmorrell@umn.edu 
+#PBS -q lab
+
+# Sample to be processed
+SAMPLE_NAME=T7013_T5011
+
+# Project name
+PROJECT=SCN
+
+# Path to reads
+FORWARD_READS=${HOME}/shared/Datasets/NGS/Barley_Exome/SEQ12462/indexed_samples/s_2_indexed_samples/${SAMPLE_NAME}/s_2_1_sequence.txt.gz
+REVERSE_READS=${HOME}/shared/Datasets/NGS/Barley_Exome/SEQ12462/indexed_samples/s_2_indexed_samples/${SAMPLE_NAME}/s_2_2_sequence.txt.gz
+
+# Output directory, currently writing full processed directory to scratch
+# Need a symlink at ${HOME} to a scratch directory
+OUTDIR=${HOME}/scratch/
+
+# The trimming script runs seqqs, scythe, and sickle, and plots_seqqs.R
+TRIM_SCRIPT=trim_autoplot.sh
+
+# Change to program directory
+# This is necessary to call the R script (used for plotting) from the trim_autoplot.sh script
+cd ${HOME}/Apps/Buffalo/seqqs/wrappers/
+
+# Run the script and write output to a directory defined by project and sample name
+./${TRIM_SCRIPT} ${SAMPLE_NAME} ${FORWARD_READS} ${REVERSE_READS} ${OUTDIR}/${PROJECT}/${SAMPLE_NAME}/
+
