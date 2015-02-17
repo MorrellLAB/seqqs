@@ -129,8 +129,8 @@ echo "[trim.sh] $SAMPLE_NAME took seconds: ${T}"
 #   This section runs the plotting commands
 #   make a directory for the plots
 mkdir -p $STAT/plots
-./fix_quality.sh $STAT/raw_${SAMPLE_NAME}_R1_qual.txt
-./fix_quality.sh $STAT/raw_${SAMPLE_NAME}_R2_qual.txt
-./fix_quality.sh $STAT/trimmed_${SAMPLE_NAME}_R1_qual.txt
-./fix_quality.sh $STAT/trimmed_${SAMPLE_NAME}_R2_qual.txt
+./fix_quality.sh $STAT/raw_${SAMPLE_NAME}_R1_qual.txt 33
+./fix_quality.sh $STAT/raw_${SAMPLE_NAME}_R2_qual.txt 33
+./fix_quality.sh $STAT/trimmed_${SAMPLE_NAME}_R1_qual.txt 33
+./fix_quality.sh $STAT/trimmed_${SAMPLE_NAME}_R2_qual.txt 33
 Rscript plots_seqqs.R $STAT $SAMPLE_NAME
