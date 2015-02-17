@@ -198,11 +198,11 @@ LengthDistributionPlot(len)
 #   Quality heatmaps
 #####
 #       Before trimming
-raw.forward.qual.name <- paste(statsdir, "/raw_", samplename, "_R1_qual.txt", sep="")
+raw.forward.qual.name <- paste(statsdir, "/raw_", samplename, "_R1_qual.txt_adj", sep="")
 qual <- read.table(raw.forward.qual.name, header=TRUE)
 BaseQualHeatmap(qual, heatmap_colors)
 #       After trimming
-Trimmed.forward.qual.name <- paste(statsdir, "/Trimmed_", samplename, "_R1_qual.txt", sep="")
+Trimmed.forward.qual.name <- paste(statsdir, "/Trimmed_", samplename, "_R1_qual.txt_adj", sep="")
 qual <- read.table(Trimmed.forward.qual.name,header=TRUE)
 BaseQualHeatmap(qual, heatmap_colors)
 dev.off()
@@ -243,11 +243,11 @@ LengthDistributionPlot(len)
 #   Quality heatmaps
 #####
 #       Before trimming
-raw.forward.qual.name <- paste(statsdir, "/raw_", samplename, "_R2_qual.txt", sep="")
+raw.forward.qual.name <- paste(statsdir, "/raw_", samplename, "_R2_qual.txt_adj", sep="")
 qual <- read.table(raw.forward.qual.name, header=TRUE)
 BaseQualHeatmap(qual, heatmap_colors)
 #       After trimming
-Trimmed.forward.qual.name <- paste(statsdir, "/Trimmed_", samplename, "_R2_qual.txt", sep="")
+Trimmed.forward.qual.name <- paste(statsdir, "/Trimmed_", samplename, "_R2_qual.txt_adj", sep="")
 qual <- read.table(Trimmed.forward.qual.name,header=TRUE)
 BaseQualHeatmap(qual, heatmap_colors)
 dev.off()
