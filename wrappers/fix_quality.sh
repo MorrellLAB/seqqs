@@ -23,4 +23,4 @@ NR>1 {
     print
 }' $MATRIX > $TEMPFILE
 
-mv $TEMPFILE $MATRIX_adj
+mv $TEMPFILE ${MATRIX}_adj
