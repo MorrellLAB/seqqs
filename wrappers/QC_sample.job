@@ -21,7 +21,7 @@ PROJECT=SCN
 
 #   Output directory, currently writing full processed directory to scratch
 #   Need a symlink at ${HOME} to a scratch directory
-OUTDIR=${HOME}/scratch/rename
+OUTDIR=${HOME}/scratch/SCN/rename/sandbox
 
 #   Not currently using this variable
 WORKING=${HOME}/scratch/SCN/rename
@@ -74,6 +74,6 @@ for j in $(seq 1 2 $READ_NUMBER)
     REVERSE_READS=${WORKING}/${SAMPLE_NAMES[j]}
 
 # Run the script and write output to a directory defined by project and sample name
-${TRIM_SCRIPT} ${SAMPLE_NAME} ${FORWARD_READS} ${REVERSE_READS} ${OUTDIR}/sandbox/${PROJECT}/${SAMPLE_NAME}/
+${TRIM_SCRIPT} ${SAMPLE_NAME} ${FORWARD_READS} ${REVERSE_READS} ${OUTDIR}/${PROJECT}/${SAMPLE_NAME}/
 done
 done
