@@ -11,6 +11,8 @@ set -o pipefail
 
 #   The trimming script runs seqqs, scythe, and sickle, and plots_seqqs.R
 #   The script is heavily modified from a Vince Buffalo original
+#   Most important modification is the addition of plotting of read data before &
+#   after 
 TRIM_SCRIPT=${HOME}/Apps/Buffalo/seqqs/wrappers/trim_autoplot.sh
 
 #   Extension on forward read names, to be trimmed by basename
@@ -45,7 +47,7 @@ READ_NUMBER=${#SAMPLE_NAMES[@]}
 #   If not, the script should break
 PAIRED_READS=$(( $READ_NUMBER % 2 ))
 if [ "$PAIRED_READS" -ne 0 ]
-	then
+   then
 echo "An uneven number of paired end reads was found!"
 break
 fi
