@@ -8,7 +8,7 @@ set -e
 set -u
 set -o pipefail
 
-VERSION=0.4
+VERSION=0.5
 SCRIPTNAME=`basename $0`
 
 # path to applications
@@ -34,7 +34,7 @@ usage: $SCRIPTNAME sample_name in1.fq in2.fq outdir [adapters prior qual_thresh 
 	qual_thresh	minimum quality for window (default: 20)\n\
 	stats		directory for statistics, will be created if does not exist (default: stats/)\n\
 Note: this uses 11 different processes.\
-\ntrim.sh version $VERSION" >&2
+\ntrim_autoplot.sh version $VERSION" >&2
     exit 1
 }
 
@@ -69,8 +69,8 @@ ADAPTERS=~/tmp/scythe/illumina_adapters.fa
 # scythe's prior
 PRIOR=${6:-0.04}
 
-# sickle's quality threshold
-QUAL_THRESH=${7:-20}
+# sickle's quality threshold, normal 20, 0=no trimming
+QUAL_THRESH=${7:-0}
 
 # stat directory
 STAT=${8:-$OUTDIR/stats}
@@ -111,7 +111,7 @@ if [ ! ${#SAMPLE_NAME} -gt 0 ]; then
     exit
 fi
 
-echo "[trim.sh] running sample '$SAMPLE_NAME' with input PE files '$IN1'/'$IN2'..."
+echo "[trim_autoplot.sh] running sample '$SAMPLE_NAME' with input PE files '$IN1'/'$IN2'..."
 
 # time trimming process process
 T="$(date +%s)"
@@ -124,7 +124,7 @@ $SICKLE pe -t ${ENCODING} -q $QUAL_THRESH \
     -s >($SEQQS -e -q ${ENCODING} -p $STAT/trimmed_${SAMPLE_NAME}_singles - | gzip > $OUTDIR/${SAMPLE_NAME}_singles_trimmed.fq.gz) > $STAT/${SAMPLE_NAME}_sickle.stderr
 
 T="$(($(date +%s)-T))"
-echo "[trim.sh] $SAMPLE_NAME took seconds: ${T}"
+echo "[trim_autoplot.sh] $SAMPLE_NAME took seconds: ${T}"
 
 #   This section runs the plotting commands
 #   make a directory for the plots
