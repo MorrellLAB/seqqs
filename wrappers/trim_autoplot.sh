@@ -63,22 +63,23 @@ OUTDIR=$4
 # adapters file
 #ADAPTERS=${5:$HOME/shared/illumina_adapters.fa}
 #ADAPTERS=${HOME}/shared/illumina_adapters.fa
-ADAPTERS=${HOME}/software/scythe/illumina_adapters.fa
+#ADAPTERS=${HOME}/software/scythe/illumina_adapters.fa
+ADAPTERS=${HOME}/sandbox/SCN_Tasks/Nextera.fa
 
 
 # scythe's prior
 PRIOR=${6:-0.04}
 
 # sickle's quality threshold, normal 20, 0=no trimming
-QUAL_THRESH=${7:-20}
+QUAL_THRESH=${7:-0}
 
 # stat directory
 STAT=${8:-$OUTDIR/stats}
 
 #   Which FASTQ encoding are we using?
 #   This is one of sanger, illumina, or solexa
-#   we default to illumina
-ENCODING=illumina
+#   we default to sanger
+ENCODING=${9:-sanger}
 
 check_file_exists() {
     if [ ! -e "$1" ]; then 
