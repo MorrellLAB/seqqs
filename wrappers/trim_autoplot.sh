@@ -13,11 +13,10 @@ SCRIPTNAME=`basename $0`
 
 # path to applications
 #SOFTWARE=~/shared/Software
-SOFTWARE=~/tmp
+SOFTWARE=${HOME}/software
 SICKLE=$SOFTWARE/sickle/sickle
 SCYTHE=$SOFTWARE/scythe/scythe
-#SEQQS=$SOFTWARE/seqqs/seqqs
-SEQQS=~/Dropbox/GitHub/seqqs/seqqs
+SEQQS=$SOFTWARE/seqqs/seqqs
 
 usage() {
     echo -e "\
@@ -64,13 +63,14 @@ OUTDIR=$4
 # adapters file
 #ADAPTERS=${5:$HOME/shared/illumina_adapters.fa}
 #ADAPTERS=${HOME}/shared/illumina_adapters.fa
-ADAPTERS=~/tmp/scythe/illumina_adapters.fa
+ADAPTERS=${HOME}/software/scythe/illumina_adapters.fa
+
 
 # scythe's prior
 PRIOR=${6:-0.04}
 
 # sickle's quality threshold, normal 20, 0=no trimming
-QUAL_THRESH=${7:-0}
+QUAL_THRESH=${7:-20}
 
 # stat directory
 STAT=${8:-$OUTDIR/stats}
@@ -78,7 +78,7 @@ STAT=${8:-$OUTDIR/stats}
 #   Which FASTQ encoding are we using?
 #   This is one of sanger, illumina, or solexa
 #   we default to illumina
-ENCODING=solexa
+ENCODING=illumina
 
 check_file_exists() {
     if [ ! -e "$1" ]; then 
