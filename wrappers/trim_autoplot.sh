@@ -97,8 +97,7 @@ check_dir_exists() {
 
 # removing this checking for path, but should perhaps replace with checking for program
 ## Check that programs are in $PATH
-((command -v $SCYTHE && command -v $SICKLE && command -v $SEQQS) > /dev/null) || \
-    (echo "[$SCRIPTNAME] error: either scythe, sickcle, or seqqs is not in your $PATH" && exit 1)
+(command -v $SCYTHE && command -v $SICKLE && command -v $SEQQS > /dev/null) || (echo "[$SCRIPTNAME] error: either scythe, sickcle, or seqqs is not in your $PATH" && exit 1)
 
 ## Check input
 check_file_exists $ADAPTERS

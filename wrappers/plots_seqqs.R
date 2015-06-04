@@ -179,7 +179,7 @@ raw.forward.nucl.name <- paste(statsdir, "/raw_", samplename, "_R1_nucl.txt", se
 nucl <- read.table(raw.forward.nucl.name, header=TRUE)
 BaseCompositionPlot(nucl, "Raw")
 #       Forward after trimming
-Trimmed.forward.nucl.name <- paste(statsdir, "/Trimmed_", samplename, "_R1_nucl.txt", sep="")
+Trimmed.forward.nucl.name <- paste(statsdir, "/trimmed_", samplename, "_R1_nucl.txt", sep="")
 nucl <- read.table(Trimmed.forward.nucl.name, header=TRUE)
 BaseCompositionPlot(nucl, "Trimmed")
 
@@ -191,7 +191,7 @@ raw.forward.len.name <- paste(statsdir, "/raw_", samplename, "_R1_len.txt", sep=
 len <- read.table(raw.forward.len.name, header=TRUE)
 LengthDistributionPlot(len)
 #       After trimming
-Trimmed.forward.len.name <- paste(statsdir, "/Trimmed_", samplename, "_R1_len.txt", sep="")
+Trimmed.forward.len.name <- paste(statsdir, "/trimmed_", samplename, "_R1_len.txt", sep="")
 len <- read.table(Trimmed.forward.len.name, header=TRUE)
 LengthDistributionPlot(len)
 #####
@@ -202,7 +202,7 @@ raw.forward.qual.name <- paste(statsdir, "/raw_", samplename, "_R1_qual.txt_adj"
 qual <- read.table(raw.forward.qual.name, header=TRUE)
 BaseQualHeatmap(qual, heatmap_colors)
 #       After trimming
-Trimmed.forward.qual.name <- paste(statsdir, "/Trimmed_", samplename, "_R1_qual.txt_adj", sep="")
+Trimmed.forward.qual.name <- paste(statsdir, "/trimmed_", samplename, "_R1_qual.txt_adj", sep="")
 qual <- read.table(Trimmed.forward.qual.name,header=TRUE)
 BaseQualHeatmap(qual, heatmap_colors)
 dev.off()
@@ -224,7 +224,7 @@ raw.forward.nucl.name <- paste(statsdir, "/raw_", samplename, "_R2_nucl.txt", se
 nucl <- read.table(raw.forward.nucl.name, header=TRUE)
 BaseCompositionPlot(nucl, "Raw")
 #       Forward after trimming
-Trimmed.forward.nucl.name <- paste(statsdir, "/Trimmed_", samplename, "_R2_nucl.txt", sep="")
+Trimmed.forward.nucl.name <- paste(statsdir, "/trimmed_", samplename, "_R2_nucl.txt", sep="")
 nucl <- read.table(Trimmed.forward.nucl.name, header=TRUE)
 BaseCompositionPlot(nucl, "Trimmed")
 
@@ -236,7 +236,7 @@ raw.forward.len.name <- paste(statsdir, "/raw_", samplename, "_R2_len.txt", sep=
 len <- read.table(raw.forward.len.name, header=TRUE)
 LengthDistributionPlot(len)
 #       After trimming
-Trimmed.forward.len.name <- paste(statsdir, "/Trimmed_", samplename, "_R2_len.txt", sep="")
+Trimmed.forward.len.name <- paste(statsdir, "/trimmed_", samplename, "_R2_len.txt", sep="")
 len <- read.table(Trimmed.forward.len.name, header=TRUE)
 LengthDistributionPlot(len)
 #####
@@ -247,7 +247,7 @@ raw.forward.qual.name <- paste(statsdir, "/raw_", samplename, "_R2_qual.txt_adj"
 qual <- read.table(raw.forward.qual.name, header=TRUE)
 BaseQualHeatmap(qual, heatmap_colors)
 #       After trimming
-Trimmed.forward.qual.name <- paste(statsdir, "/Trimmed_", samplename, "_R2_qual.txt_adj", sep="")
+Trimmed.forward.qual.name <- paste(statsdir, "/trimmed_", samplename, "_R2_qual.txt_adj", sep="")
 qual <- read.table(Trimmed.forward.qual.name,header=TRUE)
 BaseQualHeatmap(qual, heatmap_colors)
 dev.off()
